@@ -10,7 +10,7 @@ The final product will be available for the web and hybrid mobile developed apps
 
 ![Icons MEAN stack](https://i.ytimg.com/vi/Jh0er2pRcq8/maxresdefault.jpg "MEAN stack")
 
-The application will embrace the technology of a (MEAN stack)[http://blog.mongodb.org/post/49262866911/the-mean-stack-mongodb-expressjs-angularjs-and] which inclues MongoDB, ExpressJS, AngularJS and Node.js, thereby having a uniform language (Javascript) throughout the application stack. The buy-out page will be based on a single page app by providing different views using angularjs and various RESTful API calls to the Nodejs server running. The mobile dev will include using of Ionic framework on top of Cordova for the production of Android and IOS app.
+The application will embrace the technology of a [MEAN stack](http://blog.mongodb.org/post/49262866911/the-mean-stack-mongodb-expressjs-angularjs-and) which inclues MongoDB, ExpressJS, AngularJS and Node.js, thereby having a uniform language (Javascript) throughout the application stack. The buy-out page will be based on a single page app by providing different views using angularjs and various RESTful API calls to the Nodejs server running. The mobile dev will include using of Ionic framework on top of Cordova for the production of Android and IOS app.
 
 ![MEAN stack usage](http://www.bacancytechnology.com/wp-content/uploads/2015/03/NSD_Node.png "Source:bacancytechnology")
 

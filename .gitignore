@@ -1,0 +1,4 @@
+server/node_modules
+server/Database/config.json
+server/key
+server/test_*

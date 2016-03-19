@@ -1,3 +1,7 @@
+/* Set interval incase of different currencies
+  Uncomment function "setinterval in line 45"
+*/
+
 var superagent = require('superagent');
 var _ = require('underscore');
 
@@ -8,8 +12,6 @@ module.exports = function(Config) {
     Config.openExchangeRatesKey;
   var rates = {
     USD: 1,
-    EUR: 1.1,
-    GBP: 1.5,
     INR: 65
   };
 
@@ -40,7 +42,7 @@ module.exports = function(Config) {
     });
   };
 
-  setInterval(ping, 60 * 60 * 1000); // Repeat every hour (time in ms)
+  //setInterval(ping, 5 * 60 * 60 * 1000); // Repeat 5 hours (time in ms)
 
   // Return the current state of the exchange rates
   var ret = function() {

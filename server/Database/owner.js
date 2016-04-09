@@ -9,11 +9,11 @@ module.exports = new mongoose.Schema({
     },
     email: {
       type:String,
-      required: true
+      required: true,
       match : /\S+@\S+\.\S+/
     },
     phone: {
-      type : String
+      type : String,
       required : true
     },
     address:{

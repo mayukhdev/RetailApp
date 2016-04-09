@@ -114,10 +114,11 @@ module.exports = function(wagner) {
         json({ error: 'Not logged in' });
     }
 
-    req.user.populate({ path: 'data.cart.product', model: 'Product' }, handleOne.bind(null, 'user', res));
+    req.user.populate({ path: 'data.cart.product', model: 'Product' }
+                            , handleOne.bind(null, 'user', res));
   });
 
-  /* Stripe Checkout API */
+  /* Checkout API */
   api.post('/checkout', wagner.invoke(function(User, Stripe) {
     return function(req, res) {
       if (!req.user) {
@@ -127,7 +128,8 @@ module.exports = function(wagner) {
       }
 
       // Populate the products in the user's cart
-      req.user.populate({ path: 'data.cart.product', model: 'Product' }, function(error, user) {
+      req.user.populate({ path: 'data.cart.product', model: 'Product' }
+                        ,function(error, user) {
 
         // Sum up the total price in INR
         var totalCostINR = 0;
@@ -140,21 +142,18 @@ module.exports = function(wagner) {
 
         var prod = [];
         _.each(user.data.cart, function(item) {
-          prod.push( item.product.name);
+          prod.push(item.product._id);
         });
 
-          var ownerID = wagner.invoke(function(Owner) {
-            return function(req,res) {
-              Owner.findOne({}, function(error, owner) {
-                if(error) {
-                  return res.
-                    status(status.INTERNAL_SERVER_ERROR). //500
-                    json({ error: error.toString() });
-                }
-                res.json({ owner : owner });
-              });
-            };
-          };
+        var ord = {};
+        ord.user_id = user._id;
+        ord.product_id = prod;
+        ord.cost = totalCostINR;
+
+        wagner.invoke(function(Order){
+          Order.insert(ord);
+        });
+
         user.data.cart = [];
 
         //SEND EMAIL

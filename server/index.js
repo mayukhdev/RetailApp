@@ -15,5 +15,5 @@ var api_url =  '/api/v1/' + key;
 
 app.use(api_url, require('./api')(wagner));
 
-app.listen(3000);
-console.log('Listening on port 3000!');
+app.listen(process.argv[2] || 3000);
+console.log('Listening on port!');

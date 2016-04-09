@@ -16,10 +16,14 @@ module.exports = function(wagner) {
   var Owner =
       mongoose.model('Owner', require('./Database/owner'), 'owner');
 
+  var Order =
+          mongoose.model('Order', require('./Database/order'), 'order');
+
   var models = {
     Category: Category,
-    User: User
-    Owner: Owner
+    User: User,
+    Owner: Owner,
+    Order: Order
   };
 
   wagner.factory('Owner', function() {
@@ -33,6 +37,11 @@ module.exports = function(wagner) {
   wagner.factory('User', function() {
     return User;
   });
+
+  wagner.factory('Order', function() {
+    return Order;
+  });
+
 
   // _.each(models, function(value, key) {
   //   wagner.factory(key, function() {

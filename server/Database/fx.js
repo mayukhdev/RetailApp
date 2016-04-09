@@ -42,7 +42,7 @@ module.exports = function(Config) {
     });
   };
 
-  //setInterval(ping, 5 * 60 * 60 * 1000); // Repeat 5 hours (time in ms)
+  setInterval(ping, 5 * 60 * 60 * 1000); // Repeat 5 hours (time in ms)
 
   // Return the current state of the exchange rates
   var ret = function() {

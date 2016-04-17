@@ -152,6 +152,13 @@ module.exports = function(wagner) {
 
         wagner.invoke(function(Order){
           Order.insert(ord);
+          Order.find(ord).populate('product_id').populate('user_id').exec(function(err,order){
+            if (err) {
+              return
+              res.status(status.INTERNAL_SERVER_ERROR).
+              json({ error: error.toString() });
+            }
+          });
         });
 
         user.data.cart = [];

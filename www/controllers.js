@@ -1,4 +1,4 @@
-var api_link = '/api/v1/';
+var api_link = '/api/v1';
 // var api_link = (function getApiKey(){
 //   return '/api/v1/' + require('fs').readfile('./server/key','utf8',function(err,data){
 //     if(err) console.error(err);
@@ -127,11 +127,13 @@ app.controller('ProductDetailsController', function($scope, $routeParams, $http)
 
 app.controller('SearchBarController' , function($scope, $http) {
  $scope.update = function() {
-   var encoded = encodeURIComponent($scope.input);
-   $scope.searchText = $scope.input;
+   var encoded = encodeURIComponent($scope.searchText);
+   $scope.input = $scope.searchText;
    var url =  api_link + '/product/text/'+ encoded;
+   $scope.category_link = "#/category/";
    $http.get(url).success(function(data){
      $scope.results = data.products;
+    $scope.category_link += $scope.results[0].category['_id'];
    });
  };
 });

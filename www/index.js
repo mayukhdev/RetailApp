@@ -1,22 +1,3 @@
-// var controllers = require('./controllers');
-// var directives = require('./directives');
-// var services = require('./services');
-// var _ = require('underscore');
-
-// var components = angular.module('retail.components', ['ng']);
-//
-// _.each(controllers, function(controller, name) {
-//   components.controller(name, controller);
-// });
-//
-// _.each(directives, function(directive, name) {
-//   components.directive(name, directive);
-// });
-//
-// _.each(services, function(factory, name) {
-//   components.factory(name, factory);
-// });
-
 var app = angular.module('retail', ['ng', 'ngRoute']);
 
 app.config(function($routeProvider) {
@@ -34,10 +15,9 @@ app.config(function($routeProvider) {
       template: '<search-bar></search-bar>'
     });
 
-// var app = angular.module('retail', ['retail.components', 'ngRoute']);
-
 });
 
+//Facebook Icon
 window.fbAsyncInit = function() {
 FB.init({
   appId      : '1758463314386619',

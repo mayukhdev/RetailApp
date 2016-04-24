@@ -3,7 +3,7 @@ var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
 
-/*TODO: Checkout with COD  */
+/* Checkout with COD  */
 
 module.exports = function(wagner) {
   var api = express.Router();

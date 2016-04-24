@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" ng-app="retail">
+  <head>
+    <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js">
+    </script>
+    <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
+
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="controllers.js"></script>
+    <script type="text/javascript" src="directives.js"></script>
+    <script type="text/javascript" src="services.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/css/retail.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+  </head>
+  <body>
+    <nav-bar></nav-bar>
+
+    <div class="content-wrapper" ng-view></div>
+  </body>
+</html>

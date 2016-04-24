@@ -1,3 +1,10 @@
 server/node_modules
 server/Database/config.json
 server/key
+www/node_modules
+www/test.js
+www/karma.local.conf.js
+www/gulpfile.js
+server/fx.js
+server/output.dat
+server/test.js

@@ -10,8 +10,8 @@ Product.find({'internal.approximatePriceUSD' :  { "$exists" : true }})
   }
   //prod = changeToINR(prod)
   var temp = [];
-  for(p of products){
-    var j = p;
+  for(var p in products){
+    var j = products[p];
     var amt = Math.round(j.price.amount * 66.55 * 100)/100;
      j.internal.approximatePriceINR = amt
      j.price.amount = amt;

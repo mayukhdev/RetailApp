@@ -119,7 +119,7 @@ module.exports = function(wagner) {
   });
 
   /* Checkout API */
-  api.post('/checkout', wagner.invoke(function(User, Stripe) {
+  api.post('/checkout', wagner.invoke(function(User) {
     return function(req, res) {
       if (!req.user) {
         return res.
@@ -138,33 +138,42 @@ module.exports = function(wagner) {
             item.quantity;
         });
 
-        var userAddress = user.address;
+        var userAddress = req.body.address;
+        if(userAddress==undefined){
+          return false;
+        }
 
         var prod = [];
         _.each(user.data.cart, function(item) {
-          prod.push(item.product._id);
+          for(var i = 0; i < item.quantity;i++){
+              prod.push(item.product._id);
+          }
         });
+
+        //console.log(userAddress);
 
         var ord = {};
         ord.user_id = user._id;
         ord.product_id = prod;
         ord.cost = totalCostINR;
+        ord.address = userAddress;
 
         wagner.invoke(function(Order){
-          Order.insert(ord);
-          Order.find(ord).populate('product_id').populate('user_id').exec(function(err,order){
-            if (err) {
-              return
-              res.status(status.INTERNAL_SERVER_ERROR).
-              json({ error: error.toString() });
-            }
-          });
+          return (function(){
+            Order.create(ord);
+            Order.find(ord).populate('product_id').populate('user_id').exec(function(err,order){
+              if (err) {
+                return
+                res.status(status.INTERNAL_SERVER_ERROR).
+                json({ error: error.toString() });
+              }
+            });
+          })();
         });
-
-        user.data.cart = [];
-
-        //SEND EMAIL
-
+        req.user.data.cart = [];
+        req.user.save(function() {
+          return res.json({});
+        });
       });
     };
   }));

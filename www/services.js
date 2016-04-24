@@ -1,22 +1,15 @@
 //var status = require('http-status');
 
-app.service('$user' , function($http) {
+app.factory('$user' , function($http) {
   var s = {};
 
-  var api_link = "";
-  // var api_link = (function getApiKey(){
-  //   return '/api/v1/' + require('fs').readfile('./server/key','utf8',function(err,data){
-  //     if(err) console.error(err);
-  //     console.log(data);
-  //     return data;
-  //   });
-  //  })()
+  var api_link = "/api/v1";
 
   s.loadUser = function() {
-    $http.
-      get(api_link +'/me').
+    $http.get(api_link +'/me').
       success(function(data) {
         s.user = data.user;
+        console.log(s);
       }).
       error(function(data, status) {
         if (status === 403) {

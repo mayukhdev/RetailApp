@@ -20,9 +20,9 @@ app.controller('AddToCartController', function($scope, $http, $user, $timeout) {
         $user.loadUser();
         $scope.success = true;
 
-        $timeout(function() {
-          $scope.success = false;
-        }, 5000);
+      //   $timeout(function() {
+      //     $scope.success = false;
+      //   }, 5000);
       });
   };
 });
@@ -84,30 +84,17 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
   };
 
   // For checkout
-  //Stripe.setPublishableKey('pk_test_KVC0AphhVxm52zdsM4WoBstU');
-
-  // $scope.stripeToken = {
-  //   number: '4242424242424242',
-  //   cvc: '123',
-  //   exp_month: '12',
-  //   exp_year: '2016'
-  // };
 
   $scope.checkout = function() {
     $scope.error = null;
-    Stripe.card.createToken($scope.stripeToken, function(status, response) {
-      if (status.error) {
-        $scope.error = status.error;
-        return;
-      }
+    var address = $scope.userAddress;
       var link = api_link + '/checkout';
       $http.
-        post(link/*, /*{ stripeToken: response.id }*/ ).
+        post(link,{address: address }).
         success(function(data) {
           $scope.checkedOut = true;
           $user.user.data.cart = [];
-        });
-    });
+      });
   };
 });
 

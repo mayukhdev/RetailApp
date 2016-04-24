@@ -11,9 +11,6 @@ module.exports = new mongoose.Schema({
       type: String,
       required: true,
       match: /^http:\/\//i
-    },
-    address: {
-      type:String
     }
   },
   data: {

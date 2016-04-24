@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var orderSchema = {
+module.exports = new mongoose.Schema({
   product_id: [{
     type: mongoose.Schema.Types.ObjectId, ref: 'Product'
   }],
@@ -8,8 +8,9 @@ var orderSchema = {
     type: mongoose.Schema.Types.ObjectId, ref: 'User' ,required:true
   },
   order_date: { type: Date, default: Date.now },
-  cost : {type:Number,required:true}
-};
+  cost : {type:Number,required:true},
+  address: {type:String,required:true}
+});
 
-module.exports = new mongoose.Schema(orderSchema);
-module.exports.orderSchema = orderSchema;
+module.exports.set('toObject', { virtuals: true });
+module.exports.set('toJSON', { virtuals: true });

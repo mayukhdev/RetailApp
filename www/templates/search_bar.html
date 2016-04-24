@@ -1,0 +1,16 @@
+<div class="search-bar-wrapper">
+  <!-- <div
+    class="fb-like"
+    data-share="true"
+    data-width="450"
+    data-show-faces="true" >
+  </div> -->
+ <div>
+   <input ng-model="searchText" class="search-bar-input" ng-change="update()"></input>
+ </div>
+ <div class="autocomplete-results" ng-show="results.length > 0">
+   <div class="autocomplete-result" ng-repeat="result in results">
+     <a ng-href="{{category_link}}">{{result.name}}</a>
+   </div>
+ </div>
+</div>

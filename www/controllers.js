@@ -72,8 +72,18 @@ app.controller('CategoryTreeController' , function($scope, $routeParams, $http) 
 });
 
 app.controller('CheckoutController' ,function($scope, $user, $http) {
-  // For update cart
   $scope.user = $user;
+  //Removing Product
+  $scope.removeProduct = function(item){
+    for(var i=0;i<$user.user.data.cart.length;i++){
+      if($user.user.data.cart[i]==item){
+        $user.user.data.cart.pop(i);
+      }
+    }
+    $scope.updateCart();
+  }
+  // For update cart
+
   var link = api_link + '/me/cart';
   $scope.updateCart = function() {
     $http.
@@ -113,14 +123,23 @@ app.controller('ProductDetailsController', function($scope, $routeParams, $http)
 });
 
 app.controller('SearchBarController' , function($scope, $http) {
+ $scope.showCat = true;
+ var category_url =  api_link + '/category/all';
+ $http.get(category_url).success(function(data){
+   $scope.category_list = data.categories;
+ });
+ //console.log($scope.category_list);
  $scope.update = function() {
+   //$scope.showCat = false;
    var encoded = encodeURIComponent($scope.searchText);
    $scope.input = $scope.searchText;
    var url =  api_link + '/product/text/'+ encoded;
-   $scope.category_link = "#/category/";
    $http.get(url).success(function(data){
      $scope.results = data.products;
-    $scope.category_link += $scope.results[0].category['_id'];
+    // $scope.category_link += $scope.results.category['_id'];
    });
  };
+ //$scope.getCategory = function() {
+   //$scope.category_link = '#/category/';
+ //};
 });

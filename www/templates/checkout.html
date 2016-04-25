@@ -7,6 +7,9 @@
     <div class="product-details">
       <div class="name">
         {{item.product.name}}
+        <a href="javascript:void(0);">
+          <span ng-click="removeProduct(item)" class="checkout-remove">
+          <span class="fa fa-times" aria-hidden="true">remove</span></span>
       </div>
       <div class="price">
         {{item.product.displayPrice}}
@@ -18,8 +21,8 @@
     </div>
     <div style="clear: both"></div>
   </div>
-  <div class="update-cart-button" ng-click="updateCart()">
-    Update Cart
+  <div>
+    <a href="/#/" class="update-cart-button">Back to Shopping</a>
   </div>
   <div class="checkout">
     <h1>

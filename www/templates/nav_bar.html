@@ -9,7 +9,7 @@
     <div class="user-info">
       <div class="checkout" ng-show="user.user">
         <a ng-href="#/checkout">
-          <i class="fa fa-shopping-cart"></i>
+          <i class="fa fa-shopping-cart"> ({{user.user.data.cart.length}})</i>
         </a>
       </div>
       <div class="user" ng-show="user.user">

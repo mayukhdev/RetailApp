@@ -1,16 +1,24 @@
 <div class="search-bar-wrapper">
-  <!-- <div
-    class="fb-like"
-    data-share="true"
-    data-width="450"
-    data-show-faces="true" >
-  </div> -->
+
  <div>
-   <input ng-model="searchText" class="search-bar-input" ng-change="update()"></input>
+   <input ng-model="searchText" class="search-bar-input" ng-change="update()"/>
  </div>
+
  <div class="autocomplete-results" ng-show="results.length > 0">
    <div class="autocomplete-result" ng-repeat="result in results">
-     <a ng-href="{{category_link}}">{{result.name}}</a>
+     <a ng-href='#/product/{{result._id}}'>{{result.name}}</a>
    </div>
  </div>
+ <!-- Latest compiled and minified CSS -->
+ <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/> -->
+ <div ng-show="showCat">
+   <table ng-repeat="category in category_list">
+    <tr>
+      <td>
+        <a ng-href='#/category/{{category._id}}' target="_blank">{{category._id}}</a>
+      </td>
+    </tr>
+  </table>
+ </div>
+
 </div>

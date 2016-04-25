@@ -60,6 +60,21 @@ module.exports = function(wagner) {
     };
   }));
 
+  api.get('/category/all', wagner.invoke(function(Category) {
+    return function(req, res) {
+      Category.
+        find({}).
+        exec(function(error, categories) {
+          if (error) {
+            return res.
+              status(status.INTERNAL_SERVER_ERROR).
+              json({ error: error.toString() });
+          }
+          res.json({ categories: categories });
+        });
+    };
+  }));
+
   /* Product API */
   api.get('/product/id/:id', wagner.invoke(function(Product) {
     return function(req, res) {

@@ -9,7 +9,7 @@ app.factory('$user' , function($http) {
     $http.get(api_link +'/me').
       success(function(data) {
         s.user = data.user;
-        console.log(s);
+        //console.log(s);
       }).
       error(function(data, status) {
         if (status === 403) {

@@ -110,7 +110,9 @@ module.exports = function(wagner) {
           json({ error: 'No cart specified!' });
       }
 
-      req.user.data.cart = cart;
+
+        req.user.data.cart = cart;
+
       req.user.save(function(error, user) {
         if (error) {
           return res.
@@ -146,6 +148,8 @@ module.exports = function(wagner) {
       req.user.populate({ path: 'data.cart.product', model: 'Product' }
                         ,function(error, user) {
 
+        var ProductMail = "";
+
         // Sum up the total price in INR
         var totalCostINR = 0;
         _.each(user.data.cart, function(item) {
@@ -154,7 +158,7 @@ module.exports = function(wagner) {
         });
 
         var userAddress = req.body.address;
-        if(userAddress==undefined){
+        if(user.data.cart.length==0 || userAddress==undefined){
           return false;
         }
 
@@ -165,7 +169,14 @@ module.exports = function(wagner) {
           }
         });
 
-        //console.log(userAddress);
+        _.each(user.data.cart, function(item) {
+          for(var i = 0; i < item.quantity;i++){
+              ProductMail += 'Cateogry: ' + item.product.category._id + " " + item.product.name  + " Cost:" + item.product.internal.approximatePriceINR + "\n";
+          }
+        });
+
+        ProductMail += "Total Cost: " + totalCostINR + "\n";
+        ProductMail += "User Address: " + userAddress + "\n";
 
         var ord = {};
         ord.user_id = user._id;
@@ -174,17 +185,34 @@ module.exports = function(wagner) {
         ord.address = userAddress;
 
         wagner.invoke(function(Order){
-          return (function(){
-            Order.create(ord);
-            Order.find(ord).populate('product_id').populate('user_id').exec(function(err,order){
-              if (err) {
-                return
-                res.status(status.INTERNAL_SERVER_ERROR).
-                json({ error: error.toString() });
-              }
-            });
-          })();
-        });
+            return (function(){
+              Order.create(ord,function(err,data){
+                if(err) return err;
+                ProductMail+= "Order ID: " +data._id.toString();
+                //Mailing Function
+              });
+            })();
+          });
+        // wagner.invoke(function(Order){
+        //   return (function(){
+        //     Order.find(populateOrder()).populate('product_id').populate('user_id').exec(function(err,order){
+        //       if (err) {
+        //         return
+        //         res.status(status.INTERNAL_SERVER_ERROR).
+        //         json({ error: error.toString() });
+        //       }
+        //       console.log(order);
+        //       //Print here with order id due to callback
+        //       //console.log(ProductMail);
+        //     });
+        //   })();
+        // });
+
+
+
+        //Print here without order id.
+        //console.log('Here'+ ProductMail);
+
         req.user.data.cart = [];
         req.user.save(function() {
           return res.json({});

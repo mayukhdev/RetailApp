@@ -11,14 +11,15 @@
  </div>
  <!-- Latest compiled and minified CSS -->
  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/> -->
- <div ng-show="showCat">
-   <table ng-repeat="category in category_list">
-    <tr>
-      <td>
-        <a ng-href='#/category/{{category._id}}' target="_blank">{{category._id}}</a>
-      </td>
-    </tr>
-  </table>
- </div>
-
+</div>
+<div ng-show="showCat">
+  Categories:
+  <div><p></p></div>
+  <table ng-repeat="category in category_list">
+   <tr>
+     <td>
+       <a ng-href='#/category/{{category._id}}'>{{category._id}}</a>
+     </td>
+   </tr>
+ </table>
 </div>

@@ -57,7 +57,7 @@ app.controller('CategoryProductsController' , function($scope, $routeParams, $ht
 app.controller('CategoryTreeController' , function($scope, $routeParams, $http) {
   var encoded = encodeURIComponent($routeParams.category);
   var link_id = api_link + '/category/id/';
-  var link_parent = api_link + '/category/parent';
+  var link_parent = api_link + '/category/parent/';
   $http.
     get(link_id + encoded).
     success(function(data) {
@@ -99,11 +99,13 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
     $scope.error = null;
     var address = $scope.userAddress;
       var link = api_link + '/checkout';
+      $scope.updateCart();
       $http.
         post(link,{address: address }).
         success(function(data) {
           $scope.checkedOut = true;
           $user.user.data.cart = [];
+          $scope.address = "";
       });
   };
 });
@@ -126,7 +128,13 @@ app.controller('SearchBarController' , function($scope, $http) {
  $scope.showCat = true;
  var category_url =  api_link + '/category/all';
  $http.get(category_url).success(function(data){
-   $scope.category_list = data.categories;
+   //$scope.category_list = data.categories;
+   $scope.category_list = [];
+   for(var i of data.categories){
+     if (!i.hasOwnProperty('parent')){
+       $scope.category_list.push(i);
+     }
+   }
  });
  //console.log($scope.category_list);
  $scope.update = function() {

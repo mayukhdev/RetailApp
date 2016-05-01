@@ -69,6 +69,7 @@ module.exports = function(wagner,key) {
           status(status.UNAUTHORIZED). //500
           json({ error: error.toString() });
       }
+
       Category.findOne({ _id: req.body.id }, function(error, category) {
         if (error) {
           return res.
@@ -76,10 +77,47 @@ module.exports = function(wagner,key) {
             json({ error: error.toString() });
         }
         if (!category) {
-           var category = new Category({
-             _id : req.body.id,
-             parent : parent
-           });
+           var ancestors = [];
+           ancestors.push(req.body.id);
+           if(req.body.parent !== undefined){
+            var parent_id = req.body.parent;
+            ancestors.push(parent_id);
+            while(parent_id) {
+              Category.find({'_id':parent_id},function(error,category){
+                if(error){console.log("category error");}
+                  try{
+                    ancestors.push(category.parent);
+                  } catch(e){
+                    parent_id = undefined;
+                    var category = new Category({
+                      _id : req.body.id,
+                      parent : req.body.parent,
+                      ancestors : ancestors
+                    });
+                    category.save(function(err) {
+                      if(err){
+                        return res.
+                          status(status.INTERNAL_SERVER_ERROR). //500
+                          json({ error: error.toString() });
+                      }
+                    });
+                  }
+              });
+            }
+          } else{
+            var category = new Category({
+              _id : req.body.id,
+              ancestors : ancestors
+            });
+            category.save(function(err) {
+              if(err){
+                return res.
+                  status(status.INTERNAL_SERVER_ERROR). //500
+                  json({ error: error.toString() });
+              }
+            });
+          }
+
         }
       });
     };

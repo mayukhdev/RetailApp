@@ -15,8 +15,7 @@ module.exports = function(wagner,key) {
   //test
   key = "123";
 
-  var owner_insert_product = '/owner/insert/product/';
-  api.post(owner_insert_product, wagner.invoke(function(Product,Category){
+  api.post('/owner/insert/product', wagner.invoke(function(Product,Category){
     return function(req,res){
 
       if(req.body.key !== key){
@@ -63,7 +62,7 @@ module.exports = function(wagner,key) {
     };
   }));
 
-  api.post('/owner/insert/category/', wagner.invoke(function(Category) {
+  api.post('/owner/insert/category', wagner.invoke(function(Category) {
     return function(req, res) {
       if(req.body.key !== key){
         return res.

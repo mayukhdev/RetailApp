@@ -2,15 +2,89 @@ var bodyparser = require('body-parser');
 var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
+var fs = require('fs');
 
 /* Checkout with COD  */
 
-module.exports = function(wagner) {
+module.exports = function(wagner,key) {
   var api = express.Router();
 
   api.use(bodyparser.json());
 
   /* Owner API */
+  //test
+  key = "123";
+
+  var owner_insert_product = '/owner/insert/product/';
+  api.post(owner_insert_product, wagner.invoke(function(Product,Category){
+    return function(req,res){
+
+      if(req.body.key !== key){
+        return res.
+          status(status.UNAUTHORIZED). //401
+          json({ error: error.toString() });
+      }
+
+      var name = req.body.name;
+      var pic = req.body.picture;
+      var price = req.body.cost;
+
+      var category = Category.findOne({_id:category},function(error, category) {
+        if (error) {
+          return res.
+            status(status.INTERNAL_SERVER_ERROR). //500
+            json({ error: error.toString() });
+        }
+        if (!category) {
+          return res.
+            status(status.NOT_FOUND). //404
+            json({ error: 'Not found' });
+        }
+      });
+
+      var product = new Product({
+        name:name,
+        pictures:[pic],
+        price : {
+          amount: price,
+          currency: 'INR'
+        },
+        category : category
+      });
+
+      product.save(function(err){
+        if (error) {
+          return res.
+            status(status.INTERNAL_SERVER_ERROR).
+            json({ error: error.toString() });
+        }
+      });
+
+    };
+  }));
+
+  api.post('/owner/insert/category/', wagner.invoke(function(Category) {
+    return function(req, res) {
+      if(req.body.key !== key){
+        return res.
+          status(status.UNAUTHORIZED). //500
+          json({ error: error.toString() });
+      }
+      Category.findOne({ _id: req.body.id }, function(error, category) {
+        if (error) {
+          return res.
+            status(status.INTERNAL_SERVER_ERROR). //500
+            json({ error: error.toString() });
+        }
+        if (!category) {
+           var category = new Category({
+             _id : req.body.id,
+             parent : parent
+           });
+        }
+      });
+    };
+  }));
 
   api.get('/owner/details', wagner.invoke(function(Owner) {
     return function(req,res) {
@@ -201,7 +275,11 @@ module.exports = function(wagner) {
 
         var order = new Order(ord);
         order.save(function(err){
-          if(err) console.error("Error in save");
+          if(err){
+            return res.
+            status(status.INTERNAL_SERVER_ERROR).
+            json({ error: error.toString() });
+          };
            Order.find().populate('user_id').populate('product_id').exec(function(err,data) {});
              ProductMail+= "Order ID: " + order._id.toString();
              //console.log(ProductMail);

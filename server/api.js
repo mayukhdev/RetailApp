@@ -11,7 +11,7 @@ module.exports = function(wagner) {
   api.use(bodyparser.json());
 
   /* Owner API */
-  //If required
+
   api.get('/owner/details', wagner.invoke(function(Owner) {
     return function(req,res) {
       Owner.findOne({}, function(error, owner) {
@@ -136,7 +136,8 @@ module.exports = function(wagner) {
   });
 
   /* Checkout API */
-  api.post('/checkout', wagner.invoke(function(User) {
+  api.post('/checkout', wagner.invoke(function(User,Order,ownerMail,mailgunApi
+    ,mailgunDomain,mailgunFrom) {
     return function(req, res) {
       if (!req.user) {
         return res.
@@ -150,6 +151,7 @@ module.exports = function(wagner) {
 
         var ProductMail = "";
 
+
         // Sum up the total price in INR
         var totalCostINR = 0;
         _.each(user.data.cart, function(item) {
@@ -158,65 +160,78 @@ module.exports = function(wagner) {
         });
 
         var userAddress = req.body.address;
-        if(user.data.cart.length==0 || userAddress==undefined){
+        var userPhone = req.body.phone;
+        if(user.data.cart.length==0 || userAddress==undefined || userPhone==undefined){
           return false;
         }
+
 
         var prod = [];
         _.each(user.data.cart, function(item) {
           for(var i = 0; i < item.quantity;i++){
               prod.push(item.product._id);
+              //prod.push(item.product);
           }
         });
 
         _.each(user.data.cart, function(item) {
           for(var i = 0; i < item.quantity;i++){
-              ProductMail += 'Cateogry: ' + item.product.category._id + " " + item.product.name  + " Cost:" + item.product.internal.approximatePriceINR + "\n";
+              ProductMail += item.product.name  + "\nCost:" + item.product.internal.approximatePriceINR + "\n\n";
           }
         });
 
         ProductMail += "Total Cost: " + totalCostINR + "\n";
-        ProductMail += "User Address: " + userAddress + "\n";
+        ProductMail +=  "\nUser Email: " + user.profile.username + "\n";
+        ProductMail +=  "User Phone: " + userPhone + "\n";
+        ProductMail += "User Address:\n\n" + userAddress + "\n\n";
+
+
+        req.user.data.cart = [];
 
         var ord = {};
         ord.user_id = user._id;
         ord.product_id = prod;
         ord.cost = totalCostINR;
         ord.address = userAddress;
-
-        wagner.invoke(function(Order){
-            return (function(){
-              Order.create(ord,function(err,data){
-                if(err) return err;
-                ProductMail+= "Order ID: " +data._id.toString();
-                //Mailing Function
-              });
-            })();
-          });
-        // wagner.invoke(function(Order){
-        //   return (function(){
-        //     Order.find(populateOrder()).populate('product_id').populate('user_id').exec(function(err,order){
-        //       if (err) {
-        //         return
-        //         res.status(status.INTERNAL_SERVER_ERROR).
-        //         json({ error: error.toString() });
-        //       }
-        //       console.log(order);
-        //       //Print here with order id due to callback
-        //       //console.log(ProductMail);
-        //     });
-        //   })();
-        // });
+        // ord.user_id = user;
+        // ord.product_id = prod;
+        // ord.cost = totalCostINR;
+        // ord.address = userAddress;
 
 
+        var order = new Order(ord);
+        order.save(function(err){
+          if(err) console.error("Error in save");
+           Order.find().populate('user_id').populate('product_id').exec(function(err,data) {});
+             ProductMail+= "Order ID: " + order._id.toString();
+             //console.log(ProductMail);
+             var api_key = mailgunApi;
+              var domain = mailgunDomain;
+              var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+
+              var sub = 'Order by: ' + user.profile.username + ' At: ' + order.order_date;
+
+              var data = {
+                from: mailgunFrom,
+                to: ownerMail,
+                subject: sub,
+                text: ProductMail
+              };
+
+              mailgun.messages().send(data, function (error, body) {});
+
+        });
+
+
+      req.user.data.cart = [];
+      req.user.save(function() {
+        return res.json({});
+      });
 
         //Print here without order id.
         //console.log('Here'+ ProductMail);
 
-        req.user.data.cart = [];
-        req.user.save(function() {
-          return res.json({});
-        });
+
       });
     };
   }));

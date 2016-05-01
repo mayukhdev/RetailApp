@@ -73,6 +73,12 @@ app.controller('CategoryTreeController' , function($scope, $routeParams, $http) 
 
 app.controller('CheckoutController' ,function($scope, $user, $http) {
   $scope.user = $user;
+  $scope.toShow = false;
+  //Display Show message
+  $scope.displayUpdate = function(){
+    $scope.toShow = true;
+  };
+
   //Removing Product
   $scope.removeProduct = function(item){
     for(var i=0;i<$user.user.data.cart.length;i++){
@@ -90,6 +96,7 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
       put(link, $user.user).
       success(function(data) {
         $scope.updated = true;
+        $scope.toShow = false;
       });
   };
 
@@ -98,15 +105,26 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
   $scope.checkout = function() {
     $scope.error = null;
     var address = $scope.userAddress;
+    var phone = $scope.userPhone.replace(/\s/g,"");
+    var phoneno = /^\+?([0-9]{2})\)?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+    if(phone.match(phoneno)){
+      $scope.error = null;
+    }else{
+      $scope.error = "Enter Correct Phone Number";
+    }
+
+    if($scope.error === null){
       var link = api_link + '/checkout';
       $scope.updateCart();
       $http.
-        post(link,{address: address }).
+        post(link,{address: address,phone:phone}).
         success(function(data) {
           $scope.checkedOut = true;
           $user.user.data.cart = [];
-          $scope.address = "";
+          $scope.userAddress = "";
+          $scope.userPhone = "";
       });
+    }
   };
 });
 

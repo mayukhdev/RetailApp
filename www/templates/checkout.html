@@ -16,11 +16,14 @@
       </div>
       <div class="quantity">
         Quantity:
-        <input type="number" ng-model="item.quantity" />
+        <input type="number" ng-model="item.quantity" ng-change="displayUpdate()" />
       </div>
     </div>
     <div style="clear: both"></div>
   </div>
+  <div class="update-cart-button" ng-click="updateCart()">
+    Update Cart
+  </div> <div ng-show="toShow">Press update cart</div>
   <div>
     <a href="/#/" class="update-cart-button">Back to Shopping</a>
   </div>
@@ -34,8 +37,14 @@
     </div>
     <br/>
     <div>
+      Mobile Number:
+      <input type="text" placeholder="+91" ng-model="userPhone"/>
+    </div>
+    <br/>
+    <div>
       Address:
-      <input type="text" ng-model="userAddress"/>
+      <!-- <input type="text" ng-model="userAddress"/> -->
+      <textarea name"textfield" ng-model="userAddress" style="width: 200px; height: 70px;"></textarea>
     </div>
     <div class="checkout-button" ng-click="checkout()">
       Check Out

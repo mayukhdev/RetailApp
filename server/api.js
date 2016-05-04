@@ -25,10 +25,9 @@ module.exports = function(wagner,key) {
       }
 
       var name = req.body.name;
-      var pic = req.body.picture;
-      var price = req.body.cost;
+      var price = Number(req.body.price);
 
-      var category = Category.findOne({_id:category},function(error, category) {
+      Category.findOne({_id:req.body.category},function(error, category) {
         if (error) {
           return res.
             status(status.INTERNAL_SERVER_ERROR). //500
@@ -39,24 +38,24 @@ module.exports = function(wagner,key) {
             status(status.NOT_FOUND). //404
             json({ error: 'Not found' });
         }
-      });
-
-      var product = new Product({
-        name:name,
-        pictures:[pic],
-        price : {
-          amount: price,
-          currency: 'INR'
-        },
-        category : category
-      });
-
-      product.save(function(err){
-        if (error) {
-          return res.
-            status(status.INTERNAL_SERVER_ERROR).
-            json({ error: error.toString() });
-        }
+        //console.log(category);
+        var product = new Product({
+          name:name,
+          category : category,
+          pictures:[req.body.pic],
+          price : {
+            amount: price,
+            currency: 'INR'
+          }
+        });
+        //console.log(product);
+        product.save(function(err){
+          if (err) {
+            return res.
+              status(status.INTERNAL_SERVER_ERROR).
+              json({ error: err.toString() });
+          }
+        });
       });
 
     };

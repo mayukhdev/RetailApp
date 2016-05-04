@@ -7,7 +7,6 @@ var api_link = '/api/v1';
 //   });
 // })()
 
-//TODO: remove stripe and fx.
 
 app.controller('AddToCartController', function($scope, $http, $user, $timeout) {
   $scope.addToCart = function(product) {
@@ -168,4 +167,42 @@ app.controller('SearchBarController' , function($scope, $http) {
  //$scope.getCategory = function() {
    //$scope.category_link = '#/category/';
  //};
+});
+
+ins.controller("ProductInsertController",function($scope,$http){
+  var category_url =  api_link + '/category/all';
+  $scope.canSubmit = false;
+  $http.get(category_url).success(function(data) {
+    $scope.categories = data.categories;
+  });
+  $scope.submitCheck = function(){
+    if($scope.apikey && $scope.productname && $scope.pictureurl && $scope.cost && $scope.cat){
+      $scope.canSubmit = true;
+    }
+  };
+
+  $scope.submit = function(){
+    //console.log("submit");
+    if($scope.apikey && $scope.productname && $scope.pictureurl && $scope.cost && $scope.cat){
+      var link = api_link + '/owner/insert/product';
+      var values = {
+        key : $scope.apikey,
+        name :  $scope.productname,
+        pic : $scope.pictureurl,
+        price : $scope.cost,
+        category : $scope.cat
+      }
+      //console.log(values);
+      $http.
+        post(link,values).
+        success(function(data) {
+          $scope.apikey = "";
+          $scope.productname = "";
+          $scope.pictureurl = "";
+          $scope.cost = "";
+          $scope.cat = "";
+      });
+    }
+  }
+
 });

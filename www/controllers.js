@@ -172,6 +172,7 @@ app.controller('SearchBarController' , function($scope, $http) {
 ins.controller("ProductInsertController",function($scope,$http){
   var category_url =  api_link + '/category/all';
   $scope.canSubmit = false;
+  $scope.inserted = false;
   $http.get(category_url).success(function(data) {
     $scope.categories = data.categories;
   });
@@ -196,6 +197,7 @@ ins.controller("ProductInsertController",function($scope,$http){
       $http.
         post(link,values).
         success(function(data) {
+          $scope.inserted = true;
           $scope.apikey = "";
           $scope.productname = "";
           $scope.pictureurl = "";

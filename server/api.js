@@ -214,6 +214,15 @@ module.exports = function(wagner,key) {
     return function(req, res) {
       try {
         var cart = req.body.data.cart;
+        // var num = 0;
+        // for(var i=0;i< cart.length;i++) {
+        //     for(var j=0;j<cart[i].quantity;j++){
+        //       num += 1;
+        //     }
+        // }
+        // if(num >= 10) {
+        //   return res.json({error:"Cart is Full"});
+        // }
       } catch(e) {
         return res.
           status(status.BAD_REQUEST).
@@ -229,6 +238,7 @@ module.exports = function(wagner,key) {
             status(status.INTERNAL_SERVER_ERROR).
             json({ error: error.toString() });
         }
+
         return res.json({ user: user });
       });
     };

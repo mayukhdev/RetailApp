@@ -9,20 +9,30 @@ var api_link = '/api/v1';
 
 
 app.controller('AddToCartController', function($scope, $http, $user, $timeout) {
+  $scope.canAdd = true;
   $scope.addToCart = function(product) {
-    var obj = { product: product._id, quantity: 1 };
-    $user.user.data.cart.push(obj);
-    var link_cart = api_link + '/me/cart';
-    $http.
-      put(link_cart, { data: { cart: $user.user.data.cart } }).
-      success(function(data) {
-        $user.loadUser();
-        $scope.success = true;
+    var num = 0;
+    for(var i=0;i<$user.user.data.cart.length;i++) {
+        for(var j=0;j < $user.user.data.cart[i].quantity;j++){
+          num += 1;
+        }
+    }
+    if(num >= 9){
+      $scope.canAdd = false;
+    }
+    if ($scope.canAdd) {
+      var obj = { product: product._id, quantity: 1 };
 
-      //   $timeout(function() {
-      //     $scope.success = false;
-      //   }, 5000);
-      });
+      $user.user.data.cart.push(obj);
+      var link_cart = api_link + '/me/cart';
+
+      $http.
+        put(link_cart, { data: { cart: $user.user.data.cart } }).
+        success(function(data) {
+          $user.loadUser();
+          $scope.success = true;
+        });
+    }
   };
 });
 
@@ -73,6 +83,7 @@ app.controller('CategoryTreeController' , function($scope, $routeParams, $http) 
 app.controller('CheckoutController' ,function($scope, $user, $http) {
   $scope.user = $user;
   $scope.toShow = false;
+  $scope.canAdd = true;
   //Display Show message
   $scope.displayUpdate = function(){
     $scope.toShow = true;
@@ -91,11 +102,15 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
 
   var link = api_link + '/me/cart';
   $scope.updateCart = function() {
+
     $http.
-      put(link, $user.user).
-      success(function(data) {
+      put(link, $user.user).then(
+      function successCallback(data) {
         $scope.updated = true;
         $scope.toShow = false;
+      },function errorCallback(response) {
+          console.log(response);
+          $scope.canAdd = false;
       });
   };
 

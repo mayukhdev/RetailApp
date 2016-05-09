@@ -11,7 +11,7 @@
   </div>
   <div class="product-details-content">
     <div class="image-left">
-      <img ng-src="{{product.pictures[0] || 'photo_na.jpg'}}" />
+      <img ng-src="{{product.pictures[0]}}" error-src='photo_na.jpg' />
     </div>
     <div class="details-right">
       <h1>{{product.name}}</h1>

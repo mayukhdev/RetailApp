@@ -21,7 +21,7 @@
     </div>
     <div style="clear: both"></div>
   </div>
-  <div class="update-cart-button" ng-click="updateCart()">
+  <div class="update-cart-button" ng-click="updateCart()" ng-disable="!canAdd">
     Update Cart
   </div> <div ng-show="toShow">Press update cart</div>
   <div>

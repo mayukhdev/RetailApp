@@ -365,3 +365,8 @@ a {
   border-bottom: 1px solid #666666;
   border-radius: 3px;
 }
+
+
+.form-control {
+  width : 100px;
+}

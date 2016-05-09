@@ -12,7 +12,7 @@ app.factory('$user' , function($http) {
         //console.log(s);
       }).
       error(function(data, status) {
-        if (status === 403) {
+        if (status === 401) {
           s.user = null;
         }
       });

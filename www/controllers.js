@@ -7,23 +7,32 @@ var api_link = '/api/v1';
 //   });
 // })()
 
-//TODO: remove stripe and fx.
 
 app.controller('AddToCartController', function($scope, $http, $user, $timeout) {
+  $scope.canAdd = true;
   $scope.addToCart = function(product) {
-    var obj = { product: product._id, quantity: 1 };
-    $user.user.data.cart.push(obj);
-    var link_cart = api_link + '/me/cart';
-    $http.
-      put(link_cart, { data: { cart: $user.user.data.cart } }).
-      success(function(data) {
-        $user.loadUser();
-        $scope.success = true;
+    var num = 0;
+    for(var i=0;i<$user.user.data.cart.length;i++) {
+        for(var j=0;j < $user.user.data.cart[i].quantity;j++){
+          num += 1;
+        }
+    }
+    if(num >= 9){
+      $scope.canAdd = false;
+    }
+    if ($scope.canAdd) {
+      var obj = { product: product._id, quantity: 1 };
 
-      //   $timeout(function() {
-      //     $scope.success = false;
-      //   }, 5000);
-      });
+      $user.user.data.cart.push(obj);
+      var link_cart = api_link + '/me/cart';
+
+      $http.
+        put(link_cart, { data: { cart: $user.user.data.cart } }).
+        success(function(data) {
+          $user.loadUser();
+          $scope.success = true;
+        });
+    }
   };
 });
 
@@ -57,7 +66,7 @@ app.controller('CategoryProductsController' , function($scope, $routeParams, $ht
 app.controller('CategoryTreeController' , function($scope, $routeParams, $http) {
   var encoded = encodeURIComponent($routeParams.category);
   var link_id = api_link + '/category/id/';
-  var link_parent = api_link + '/category/parent';
+  var link_parent = api_link + '/category/parent/';
   $http.
     get(link_id + encoded).
     success(function(data) {
@@ -73,6 +82,13 @@ app.controller('CategoryTreeController' , function($scope, $routeParams, $http) 
 
 app.controller('CheckoutController' ,function($scope, $user, $http) {
   $scope.user = $user;
+  $scope.toShow = false;
+  $scope.canAdd = true;
+  //Display Show message
+  $scope.displayUpdate = function(){
+    $scope.toShow = true;
+  };
+
   //Removing Product
   $scope.removeProduct = function(item){
     for(var i=0;i<$user.user.data.cart.length;i++){
@@ -86,10 +102,15 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
 
   var link = api_link + '/me/cart';
   $scope.updateCart = function() {
+
     $http.
-      put(link, $user.user).
-      success(function(data) {
+      put(link, $user.user).then(
+      function successCallback(data) {
         $scope.updated = true;
+        $scope.toShow = false;
+      },function errorCallback(response) {
+          console.log(response);
+          $scope.canAdd = false;
       });
   };
 
@@ -98,13 +119,26 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
   $scope.checkout = function() {
     $scope.error = null;
     var address = $scope.userAddress;
+    var phone = $scope.userPhone.replace(/\s/g,"");
+    var phoneno = /^\+?([0-9]{2})\)?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+    if(phone.match(phoneno)){
+      $scope.error = null;
+    }else{
+      $scope.error = "Enter Correct Phone Number";
+    }
+
+    if($scope.error === null){
       var link = api_link + '/checkout';
+      $scope.updateCart();
       $http.
-        post(link,{address: address }).
+        post(link,{address: address,phone:phone}).
         success(function(data) {
           $scope.checkedOut = true;
           $user.user.data.cart = [];
+          $scope.userAddress = "";
+          $scope.userPhone = "";
       });
+    }
   };
 });
 
@@ -126,7 +160,13 @@ app.controller('SearchBarController' , function($scope, $http) {
  $scope.showCat = true;
  var category_url =  api_link + '/category/all';
  $http.get(category_url).success(function(data){
-   $scope.category_list = data.categories;
+   //$scope.category_list = data.categories;
+   $scope.category_list = [];
+   for(var i of data.categories){
+     if (!i.hasOwnProperty('parent')){
+       $scope.category_list.push(i);
+     }
+   }
  });
  //console.log($scope.category_list);
  $scope.update = function() {
@@ -142,4 +182,44 @@ app.controller('SearchBarController' , function($scope, $http) {
  //$scope.getCategory = function() {
    //$scope.category_link = '#/category/';
  //};
+});
+
+ins.controller("ProductInsertController",function($scope,$http){
+  var category_url =  api_link + '/category/all';
+  $scope.canSubmit = false;
+  $scope.inserted = false;
+  $http.get(category_url).success(function(data) {
+    $scope.categories = data.categories;
+  });
+  $scope.submitCheck = function(){
+    if($scope.apikey && $scope.productname && $scope.pictureurl && $scope.cost && $scope.cat){
+      $scope.canSubmit = true;
+    }
+  };
+
+  $scope.submit = function(){
+    //console.log("submit");
+    if($scope.apikey && $scope.productname && $scope.pictureurl && $scope.cost && $scope.cat){
+      var link = api_link + '/owner/insert/product';
+      var values = {
+        key : $scope.apikey,
+        name :  $scope.productname,
+        pic : $scope.pictureurl,
+        price : $scope.cost,
+        category : $scope.cat
+      }
+      //console.log(values);
+      $http.
+        post(link,values).
+        success(function(data) {
+          $scope.inserted = true;
+          $scope.apikey = "";
+          $scope.productname = "";
+          $scope.pictureurl = "";
+          $scope.cost = "";
+          $scope.cat = "";
+      });
+    }
+  }
+
 });

@@ -1,4 +1,4 @@
-<div class="cart-button" ng-click="addToCart(product);">
+<div class="cart-button" ng-disable="!canAdd" ng-click="addToCart(product);">
   <div ng-show="!success">
     <i class="fa fa-cart-plus"></i>
     Add

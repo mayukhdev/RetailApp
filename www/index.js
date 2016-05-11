@@ -1,4 +1,5 @@
 var app = angular.module('retail', ['ng', 'ngRoute']);
+var ins = angular.module('retailOwner', ['ng', 'ngRoute']);
 
 app.config(function($routeProvider) {
   $routeProvider.

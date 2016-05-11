@@ -12,10 +12,6 @@ module.exports = function(db) {
         required: true,
         set: function(v) {
           var div = 1.0;
-          // if(this.price.currency==='USD'){
-          //   try{div = fx()['INR'];}
-          //   catch(err){ console.log("Uncomment function fx and add to Wagner");}
-          // }
           this.internal.approximatePriceINR =
             v * div;
           return v;
@@ -28,10 +24,6 @@ module.exports = function(db) {
         required: true,
         set: function(v) {
           var div = 1.0;
-          // if(v==='USD'){
-          //   try{div = fx()['INR'];}
-          //   catch(err){ console.log("Uncomment function fx and add to Wagner");}
-          // }
           this.internal.approximatePriceINR =
             this.price.amount * div;
           return v;
@@ -78,10 +70,7 @@ module.exports.schema = function(){
         required: true,
         set: function(v) {
           var div = 1.0;
-          // if(this.price.currency==='USD'){
-          //   try{div = fx()['INR'];}
-          //   catch(err){ console.log("Uncomment function fx and add to Wagner");}
-          // }
+
           this.internal.approximatePriceINR =
             v * div;
           return v;
@@ -94,10 +83,7 @@ module.exports.schema = function(){
         required: true,
         set: function(v) {
           var div = 1.0;
-          // if(v==='USD'){
-          //   try{div = fx()['INR'];}
-          //   catch(err){ console.log("Uncomment function fx and add to Wagner");}
-          // }
+
           this.internal.approximatePriceINR =
             this.price.amount * div;
           return v;

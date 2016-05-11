@@ -28,6 +28,8 @@ function setupAuth(User, Config, app) {
         return done('No emails associated with this account!');
       }
 
+       
+
       User.findOneAndUpdate(
         { 'data.oauth': profile.id },
         {

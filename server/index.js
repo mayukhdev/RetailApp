@@ -6,16 +6,16 @@ var app = express();
 
 //Create API key
 var key = "";
-//var key = require('./apikey')(15);
+var key = require('./apikey')(15);
 
 require('./models')(wagner);
 require('./Database/dependencies')(wagner);
 
 wagner.invoke(require('./Database/auth'), { app: app });
 
-var api_url =  '/api/v1/' + key;
+var api_url =  '/api/v1/';
 
-app.use(api_url, require('./api')(wagner));
+app.use(api_url, require('./api')(wagner,key));
 
 var rootpath = path.normalize(__dirname + '/../');
 console.log("Static: " + rootpath + 'www');

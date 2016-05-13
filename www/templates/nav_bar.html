@@ -5,7 +5,9 @@
     </div>
     <div class="title">
       <a href="/#/">Retail</a>
+
     </div>
+
     <div class="user-info">
       <div class="checkout" ng-show="user.user">
         <a ng-href="#/checkout">
@@ -15,6 +17,11 @@
       <div class="user" ng-show="user.user">
         <img ng-src="{{user.user.profile.picture}}" />
       </div>
+      <div ng-show="user.user">
+          <a href="javascript:void(0);" class="logout" ng-click="logout()">
+            <i class="fa fa-sign-out">LogOut</i>
+          </a>
+     </div>
       <div class="login" ng-show="!user.user">
         <a href="/auth/facebook?redirect=%2F%23%2F">
           <img src="//i.stack.imgur.com/LKMP7.png">
@@ -22,4 +29,5 @@
       </div>
     </div>
   </div>
+
 </div>

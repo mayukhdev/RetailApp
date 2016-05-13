@@ -142,8 +142,12 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
   };
 });
 
-app.controller('NavBarController' , function($scope, $user) {
+app.controller('NavBarController' , function($scope, $user, $http,$window) {
   $scope.user = $user;
+  $scope.logout = function(){
+    $http.get('/logout');
+    $window.location.reload();
+  }
 });
 
 app.controller('ProductDetailsController', function($scope, $routeParams, $http) {

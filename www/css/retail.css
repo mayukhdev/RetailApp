@@ -62,6 +62,15 @@ a {
   top: -3px;
 }
 
+.nav-bar .logout {
+  position: absolute;
+  width:50px;
+  font-size: 20px;
+  right: 42px;
+  top: 5px;
+  border-radius: 8px;
+}
+
 .nav-bar .checkout {
   position: absolute;
   width:50px;
@@ -71,6 +80,7 @@ a {
   background-color: #CC4A14;
   border-radius: 8px;
   padding: 5px;
+  margin-right: 100px;
 }
 
 .nav-bar .checkout a {
@@ -88,6 +98,7 @@ a {
   right: 0px;
   top: 5px;
   height: 30px;
+  margin-right: 100px;
 }
 
 .nav-bar .user-info .user img {

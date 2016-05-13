@@ -28,7 +28,7 @@ function setupAuth(User, Config, app) {
         return done('No emails associated with this account!');
       }
 
-       
+
 
       User.findOneAndUpdate(
         { 'data.oauth': profile.id },
@@ -74,6 +74,11 @@ function setupAuth(User, Config, app) {
     },
     function(req, res) {
       res.redirect(req.query.redirect);
+    });
+
+    app.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/#/');
     });
 }
 

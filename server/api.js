@@ -296,11 +296,11 @@ module.exports = function(wagner,key) {
 
         _.each(user.data.cart, function(item) {
           for(var i = 0; i < item.quantity;i++){
-              ProductMail += item.product.name  + "\nCost:" + item.product.internal.approximatePriceINR + "\n\n";
+              ProductMail += item.product.name  + "\nCost: ₹" + item.product.internal.approximatePriceINR + "\n\n";
           }
         });
 
-        ProductMail += "Total Cost: " + totalCostINR + "\n";
+        ProductMail += "Total Cost: ₹" + totalCostINR + "\n";
         ProductMail +=  "\nUser Email: " + user.profile.username + "\n";
         ProductMail +=  "User Phone: " + userPhone + "\n";
         ProductMail += "User Address:\n\n" + userAddress + "\n\n";
@@ -341,8 +341,11 @@ module.exports = function(wagner,key) {
                 subject: sub,
                 text: ProductMail
               };
-
-              mailgun.messages().send(data, function (error, body) {});
+              // console.log(data);
+              mailgun.messages().send(data, function (error, body) {
+                //  console.log(body);
+                //  console.log(error);
+              });
 
         });
 

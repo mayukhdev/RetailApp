@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var schema = require('./product').schema();
 
-db = mongoose.connect('mongodb://localhost:27017/test');
+// db = mongoose.connect('mongodb://localhost:27017/test');
+db = mongoose.connect('mongodb://mayukhdev:mayukhdev@ds023432.mlab.com:23432/retail');
 Product = db.model('Product', schema, 'products');
 Product.find({'internal.approximatePriceUSD' :  { "$exists" : true }})
 .exec(function(error,products){

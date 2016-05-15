@@ -145,8 +145,9 @@ app.controller('CheckoutController' ,function($scope, $user, $http) {
 app.controller('NavBarController' , function($scope, $user, $http,$window) {
   $scope.user = $user;
   $scope.logout = function(){
-    $http.get('/logout');
-    $window.location.reload();
+    $http.get('/logout').success(function(data){
+      $window.location.reload();
+    });
   }
 });
 

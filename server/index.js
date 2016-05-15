@@ -22,5 +22,9 @@ console.log("Static: " + rootpath + 'www');
 
 app.use(express.static(rootpath + '/www'));
 
+app.get('*', function(req, res){
+  res.sendFile(rootpath + 'www/404.html');
+})
+
 app.listen(process.argv[2] || 3000);
 console.log('Listening on port 3000!');

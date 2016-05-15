@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 //var _ = require('underscore');
 
 module.exports = function(wagner) {
-  mongoose.connect('mongodb://localhost:27017/test');
-
+   mongoose.connect('mongodb://localhost:27017/test');
+  //mongoose.connect('mongodb://<ID>:<PASS>@<LINK>');
   wagner.factory('db', function() {
     return mongoose;
   });

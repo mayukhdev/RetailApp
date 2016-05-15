@@ -14,7 +14,8 @@ app.config(function($routeProvider) {
     }).
     when('/', {
       template: '<search-bar></search-bar>'
-    });
+    }).
+    otherwise({ redirectTo: '/' });
 
 });
 
